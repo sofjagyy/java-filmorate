@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Email;
 
 import java.time.LocalDate;
 
-
 @Getter
 @Setter
 @Builder

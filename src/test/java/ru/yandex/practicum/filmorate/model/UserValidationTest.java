@@ -24,7 +24,6 @@ public class UserValidationTest {
             return user;
         }
 
-
         @Test
         void userEmailNotNull() {
             User user = validUser();
