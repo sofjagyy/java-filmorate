@@ -25,13 +25,13 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody @Valid User user) {
+    public User create(@Valid @RequestBody User user) {
         log.info("Создание нового пользователя в базе: '{}'", user.getLogin());
 
         user.setId(getNextId());
         log.debug("Присвоен ID: {} пользователю '{}'", user.getId(), user.getLogin());
 
-        if (user.getName().isBlank()) {
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
 
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@RequestBody @Valid User updatedUser) {
+    public User update( @Valid @RequestBody User updatedUser) {
         log.info("Попытка обновления данных пользователя с ID: {}", updatedUser.getId());
 
         if (users.containsKey(updatedUser.getId())) {

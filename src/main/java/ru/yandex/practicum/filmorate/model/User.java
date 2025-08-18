@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class User {
     protected int id;
 
-    @NotNull(message = "Электронная почта должна быть проинициализирована")
+    @NotBlank(message = "Электронная почта должна быть проинициализирована")
     @Email(message = "Электронная почта должна соответствовать формату и не может быть пустой")
     protected String email;
 
