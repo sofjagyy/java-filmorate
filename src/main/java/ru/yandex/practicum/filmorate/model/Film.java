@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = { "id" })
 @Builder
 public class Film {
-    private int id;
+    private Integer id;
 
     @NotBlank(message = "Название фильма не может быть пустым")
     protected String name;
