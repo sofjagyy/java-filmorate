@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import ru.yandex.practicum.filmorate.validation.ValidMovieReleaseDate;
+import ru.yandex.practicum.filmorate.validation.ValidFilmReleaseDate;
 import java.time.LocalDate;
 
 @Getter
@@ -19,7 +19,7 @@ public class Film {
     @Size(max = 200, message = "Описание не может превышать 200 символов")
     protected String description;
 
-    @ValidMovieReleaseDate(message = "Фильмы существуют с 28 декабря 1895 года")
+    @ValidFilmReleaseDate(message = "Фильмы существуют с 28 декабря 1895 года")
     protected LocalDate releaseDate;
 
     @Positive(message = "Длительность должна быть положительной")

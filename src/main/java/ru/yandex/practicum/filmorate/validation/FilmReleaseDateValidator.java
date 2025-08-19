@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.time.LocalDate;
 
-public class MovieReleaseDateValidator implements ConstraintValidator<ValidMovieReleaseDate, LocalDate> {
+public class FilmReleaseDateValidator implements ConstraintValidator<ValidFilmReleaseDate, LocalDate> {
 
     private static final LocalDate FIRST_MOVIE_DATE = LocalDate.of(1895, 12, 28);
 
