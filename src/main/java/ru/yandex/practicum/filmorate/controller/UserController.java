@@ -44,29 +44,30 @@ public class UserController {
     @PutMapping
     public User update(@Valid @RequestBody User updatedUser) {
         log.info("Попытка обновления данных пользователя с ID: {}", updatedUser.getId());
-
         if (users.containsKey(updatedUser.getId())) {
-            User oldUser = users.get(updatedUser.getId());
-            log.info("Пользователь найден: '{}'. Начинаем обновление", oldUser.getLogin());
-
-            oldUser.setName(updatedUser.getName());
-            log.info("Обновляем имя");
-
-            oldUser.setEmail(updatedUser.getEmail());
-            log.info("Обновляем электронную почту");
-
-            oldUser.setLogin(updatedUser.getLogin());
-            log.info("Обновляем логин");
-
-            if (updatedUser.getBirthday() != null) {
-                log.info("Обновляем день рождения пользователя");
-                oldUser.setBirthday(updatedUser.getBirthday());
-            }
-            log.info("Пользователь с ID: {} успешно обновлен", oldUser.getId());
-            return oldUser;
+            log.warn("Попытка обновления несуществующего пользователя с ID: {}", updatedUser.getId());
+            throw new NotFoundException("Нет пользователя с таким id");
         }
-        log.warn("Попытка обновления несуществующего пользователя с ID: {}", updatedUser.getId());
-        throw new NotFoundException("Нет пользователя с таким id");
+
+        User oldUser = users.get(updatedUser.getId());
+        log.info("Пользователь найден: '{}'. Начинаем обновление", oldUser.getLogin());
+
+        oldUser.setName(updatedUser.getName());
+        log.info("Обновляем имя");
+
+        oldUser.setEmail(updatedUser.getEmail());
+        log.info("Обновляем электронную почту");
+
+        oldUser.setLogin(updatedUser.getLogin());
+        log.info("Обновляем логин");
+
+        if (updatedUser.getBirthday() != null) {
+            log.info("Обновляем день рождения пользователя");
+            oldUser.setBirthday(updatedUser.getBirthday());
+        }
+
+        log.info("Пользователь с ID: {} успешно обновлен", oldUser.getId());
+        return oldUser;
     }
 
     private int getNextId() {

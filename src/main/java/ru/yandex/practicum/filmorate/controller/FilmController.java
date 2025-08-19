@@ -48,32 +48,31 @@ public class FilmController {
     @PutMapping
     public Film update(@Valid @RequestBody Film updatedFilm) {
         log.info("Попытка обновления фильма с ID: {}", updatedFilm.getId());
-
-        if (films.containsKey(updatedFilm.getId())) {
-            Film oldFilm = films.get(updatedFilm.getId());
-            log.info("Фильм найден: '{}'. Начинаем обновление", oldFilm.getName());
-
-            oldFilm.setName(updatedFilm.getName());
-            log.info("Обновляем название");
-
-            oldFilm.setReleaseDate(updatedFilm.getReleaseDate());
-            log.info("Обновляем дату релиза");
-
-            if (updatedFilm.getDescription() != null) {
-                oldFilm.setDescription(updatedFilm.getDescription());
-            }
-            log.info("Обновляем описание");
-
-            if (updatedFilm.getDuration() != null) {
-                log.info("Обновляем длительность");
-                oldFilm.setDuration(updatedFilm.getDuration());
-            }
-
-            log.info("Фильм с ID: {} успешно обновлен", oldFilm.getId());
-            return oldFilm;
+        if (!films.containsKey(updatedFilm.getId())) {
+            log.warn("Попытка обновления несуществующего фильма с ID: {}", updatedFilm.getId());
+            throw new NotFoundException("Нет фильма с таким id");
         }
 
-        log.warn("Попытка обновления несуществующего фильма с ID: {}", updatedFilm.getId());
-        throw new NotFoundException("Нет фильма с таким id");
+        Film oldFilm = films.get(updatedFilm.getId());
+        log.info("Фильм найден: '{}'. Начинаем обновление", oldFilm.getName());
+
+        oldFilm.setName(updatedFilm.getName());
+        log.info("Обновляем название");
+
+        oldFilm.setReleaseDate(updatedFilm.getReleaseDate());
+        log.info("Обновляем дату релиза");
+
+        if (updatedFilm.getDescription() != null) {
+            oldFilm.setDescription(updatedFilm.getDescription());
+        }
+        log.info("Обновляем описание");
+
+        if (updatedFilm.getDuration() != null) {
+            log.info("Обновляем длительность");
+            oldFilm.setDuration(updatedFilm.getDuration());
+        }
+
+        log.info("Фильм с ID: {} успешно обновлен", oldFilm.getId());
+        return oldFilm;
     }
 }
