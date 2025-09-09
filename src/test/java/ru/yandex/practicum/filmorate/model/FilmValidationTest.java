@@ -15,7 +15,7 @@ public class FilmValidationTest {
 
     private static Film validFilm() {
         Film film = Film.builder()
-                .id(1)
+                .id(1L)
                 .name("Тестовый фильм")
                 .description("Описание")
                 .releaseDate(LocalDate.of(2000, 1, 1))

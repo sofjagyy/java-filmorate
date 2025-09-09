@@ -3,7 +3,10 @@ package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import ru.yandex.practicum.filmorate.validation.ValidFilmReleaseDate;
+
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -11,7 +14,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = { "id" })
 @Builder
 public class Film {
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Название фильма не может быть пустым")
     protected String name;
@@ -24,4 +27,7 @@ public class Film {
 
     @Positive(message = "Длительность должна быть положительной")
     private Integer duration;
+
+    @Builder.Default
+    private Set<Long> likes = new HashSet<>();
 }

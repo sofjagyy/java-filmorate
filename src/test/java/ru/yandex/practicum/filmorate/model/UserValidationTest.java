@@ -15,7 +15,7 @@ public class UserValidationTest {
 
         private static User validUser() {
             User user = User.builder()
-                    .id(1)
+                    .id(1L)
                     .email("test@example.com")
                     .login("testuser")
                     .name("Test User")

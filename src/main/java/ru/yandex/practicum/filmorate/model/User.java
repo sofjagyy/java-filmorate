@@ -2,9 +2,10 @@ package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import jakarta.validation.constraints.Email;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode(of = { "id" })
 public class User {
-    protected Integer id;
+    protected Long id;
 
     @NotBlank(message = "Электронная почта должна быть проинициализирована")
     @Email(message = "Электронная почта должна соответствовать формату и не может быть пустой")
@@ -26,6 +27,7 @@ public class User {
 
     @PastOrPresent(message = "День рождения не может быть в будущем")
     protected LocalDate birthday;
+
+    @Builder.Default
+    private Set<Long> friends = new HashSet<>();
 }
-
-
