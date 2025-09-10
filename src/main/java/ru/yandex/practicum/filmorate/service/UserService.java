@@ -20,7 +20,7 @@ public class UserService {
 
     private final UserStorage userStorage;
 
-    private User getUserByIdInternal(Long id) {
+    public User getUserById(Long id) {
         return userStorage.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID " + id + " не найден"));
     }
@@ -30,7 +30,7 @@ public class UserService {
     }
 
     public User updateUser(User updatedUser) {
-        User existingUser = getUserByIdInternal(updatedUser.getId());
+        User existingUser = getUserById(updatedUser.getId());
 
         if (updatedUser.getName() != null) {
             existingUser.setName(updatedUser.getName());
@@ -54,13 +54,9 @@ public class UserService {
         return userStorage.findAll();
     }
 
-    public User getUserById(Long id) {
-        return getUserByIdInternal(id);
-    }
-
     public void addFriend(Long userId, Long friendId) {
-        User user = getUserByIdInternal(userId);
-        User friend = getUserByIdInternal(friendId);
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
 
         if (user.getFriends() == null) {
             user.setFriends(new HashSet<>());
@@ -83,8 +79,8 @@ public class UserService {
     }
 
     public void removeFriend(Long userId, Long friendId) {
-        User user = getUserByIdInternal(userId);
-        User friend = getUserByIdInternal(friendId);
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
 
         boolean userRemoved = false;
         boolean friendRemoved = false;
@@ -111,20 +107,20 @@ public class UserService {
     }
 
     public List<User> getUserFriends(Long userId) {
-        User user = getUserByIdInternal(userId);
+        User user = getUserById(userId);
 
         if (user.getFriends() == null || user.getFriends().isEmpty()) {
             return List.of();
         }
 
         return user.getFriends().stream()
-                .map(this::getUserByIdInternal)
+                .map(this::getUserById)
                 .collect(Collectors.toList());
     }
 
     public List<User> getCommonFriends(Long userId, Long otherUserId) {
-        User user = getUserByIdInternal(userId);
-        User otherUser = getUserByIdInternal(otherUserId);
+        User user = getUserById(userId);
+        User otherUser = getUserById(otherUserId);
 
         if (user.getFriends() == null || otherUser.getFriends() == null) {
             return List.of();
@@ -134,7 +130,7 @@ public class UserService {
         commonFriendIds.retainAll(otherUser.getFriends());
 
         return commonFriendIds.stream()
-                .map(this::getUserByIdInternal)
+                .map(this::getUserById)
                 .collect(Collectors.toList());
     }
 }

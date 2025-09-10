@@ -22,7 +22,7 @@ public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
 
-    private Film getFilmByIdInternal(Long id) {
+    public Film getFilmById(Long id) {
         return filmStorage.findById(id)
                 .orElseThrow(() -> new NotFoundException("Фильм с ID " + id + " не найден"));
     }
@@ -37,7 +37,7 @@ public class FilmService {
     }
 
     public Film updateFilm(Film updatedFilm) {
-        Film existingFilm = getFilmByIdInternal(updatedFilm.getId());
+        Film existingFilm = getFilmById(updatedFilm.getId());
 
         existingFilm.setName(updatedFilm.getName());
         existingFilm.setReleaseDate(updatedFilm.getReleaseDate());
@@ -57,12 +57,8 @@ public class FilmService {
         return filmStorage.findAll();
     }
 
-    public Film getFilmById(Long id) {
-        return getFilmByIdInternal(id);
-    }
-
     public void addLike(Long filmId, Long userId) {
-        Film film = getFilmByIdInternal(filmId);
+        Film film = getFilmById(filmId);
         checkUserExists(userId);
 
         if (film.getLikes() == null) {
@@ -78,7 +74,7 @@ public class FilmService {
     }
 
     public void removeLike(Long filmId, Long userId) {
-        Film film = getFilmByIdInternal(filmId);
+        Film film = getFilmById(filmId);
         checkUserExists(userId);
 
         if (film.getLikes() != null && film.getLikes().remove(userId)) {
