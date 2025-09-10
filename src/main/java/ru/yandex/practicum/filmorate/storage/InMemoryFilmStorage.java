@@ -1,13 +1,9 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
@@ -15,12 +11,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
 
     private Long getNextId() {
-        Long currentMaxId = films.keySet()
+        return films.keySet()
                 .stream()
                 .mapToLong(id -> id)
                 .max()
-                .orElse(0);
-        return ++currentMaxId;
+                .orElse(0L) + 1;
     }
 
     @Override
@@ -31,24 +26,9 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film update(Film updatedFilm) {
-        if (!films.containsKey(updatedFilm.getId())) {
-            throw new NotFoundException("Нет фильма с таким id");
-        }
-
-        Film oldFilm = films.get(updatedFilm.getId());
-        oldFilm.setName(updatedFilm.getName());
-        oldFilm.setReleaseDate(updatedFilm.getReleaseDate());
-
-        if (updatedFilm.getDescription() != null) {
-            oldFilm.setDescription(updatedFilm.getDescription());
-        }
-
-        if (updatedFilm.getDuration() != null) {
-            oldFilm.setDuration(updatedFilm.getDuration());
-        }
-
-        return oldFilm;
+    public Film update(Film film) {
+        films.put(film.getId(), film);
+        return film;
     }
 
     @Override
@@ -57,15 +37,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film findById(Long id) {
+    public Optional<Film> findById(Long id) {
         Film film = films.get(id);
-        if (film == null) {
-            throw new NotFoundException("Фильм с ID " + id + " не найден");
-        }
-
-        if (film.getLikes() == null) {
+        if (film != null && film.getLikes() == null) {
             film.setLikes(new HashSet<>());
         }
-        return film;
+        return Optional.ofNullable(film);
     }
 }
