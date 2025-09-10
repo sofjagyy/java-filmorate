@@ -21,26 +21,22 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Collection<User>> findAll() {
-        Collection<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PostMapping
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
-        User createdUser = userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(user));
     }
 
     @PutMapping
     public ResponseEntity<User> update(@Valid @RequestBody User updatedUser) {
-        User user = userService.updateUser(updatedUser);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userService.updateUser(updatedUser));
     }
 
     @PutMapping("/{id}/friends/{friendId}")
@@ -57,13 +53,12 @@ public class UserController {
 
     @GetMapping("/{id}/friends")
     public ResponseEntity<List<User>> getUserFriends(@PathVariable Long id) {
-        List<User> friends = userService.getUserFriends(id);
-        return ResponseEntity.ok(friends);
+        return ResponseEntity.ok(userService.getUserFriends(id));
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     public ResponseEntity<List<User>> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        List<User> commonFriends = userService.getCommonFriends(id, otherId);
-        return ResponseEntity.ok(commonFriends);
+        return ResponseEntity.ok(userService.getCommonFriends(id, otherId));
     }
 }
+
