@@ -22,26 +22,22 @@ public class FilmController {
 
     @GetMapping
     public ResponseEntity<Collection<Film>> findAll() {
-        Collection<Film> films = filmService.getAllFilms();
-        return ResponseEntity.ok(films);
+        return ResponseEntity.ok(filmService.getAllFilms());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Film> getFilm(@PathVariable Long id) {
-        Film film = filmService.getFilmById(id);
-        return ResponseEntity.ok(film);
+        return ResponseEntity.ok(filmService.getFilmById(id));
     }
 
     @PostMapping
     public ResponseEntity<Film> create(@Valid @RequestBody Film film) {
-        Film createdFilm = filmService.addFilm(film);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdFilm);
+        return ResponseEntity.status(HttpStatus.CREATED).body(filmService.addFilm(film));
     }
 
     @PutMapping
     public ResponseEntity<Film> update(@Valid @RequestBody Film updatedFilm) {
-        Film film = filmService.updateFilm(updatedFilm);
-        return ResponseEntity.ok(film);
+        return ResponseEntity.ok(filmService.updateFilm(updatedFilm));
     }
 
     @PutMapping("/{id}/like/{userId}")
@@ -58,7 +54,6 @@ public class FilmController {
 
     @GetMapping("/popular")
     public ResponseEntity<List<Film>> getPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
-        List<Film> popularFilms = filmService.getPopularFilms(count);
-        return ResponseEntity.ok(popularFilms);
+        return ResponseEntity.ok(filmService.getPopularFilms(count));
     }
 }
