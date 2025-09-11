@@ -1,33 +1,42 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
-@Builder
-@ToString
-@EqualsAndHashCode(of = { "id" })
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
-    protected Long id;
+    @EqualsAndHashCode.Include
+    private Long id;
 
-    @NotBlank(message = "Электронная почта должна быть проинициализирована")
-    @Email(message = "Электронная почта должна соответствовать формату и не может быть пустой")
-    protected String email;
+    @NotBlank(message = "Логин не может быть пустым")
+    @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы")
+    private String login;
 
-    @NotNull(message = "Логин не Null")
-    @Pattern(regexp = "^\\S+$", message = ("Логин не может содержать пробелов или быть пустым"))
-    protected String login;
+    private String name;
 
-    protected String name;
+    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "Email должен быть корректным")
+    private String email;
 
-    @PastOrPresent(message = "День рождения не может быть в будущем")
-    protected LocalDate birthday;
+    @Past(message = "Дата рождения не может быть в будущем")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthday;
 
-    @Builder.Default
     private Set<Long> friends = new HashSet<>();
+
+    public User() {}
+
+    public User(String login, String name, String email, LocalDate birthday) {
+        this.login = login;
+        this.name = name;
+        this.email = email;
+        this.birthday = birthday;
+    }
 }

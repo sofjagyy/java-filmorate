@@ -1,13 +1,13 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.impl;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.*;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-
     private final Map<Long, Film> films = new HashMap<>();
 
     private Long getNextId() {
@@ -39,8 +39,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Optional<Film> findById(Long id) {
         Film film = films.get(id);
-        if (film != null && film.getLikes() == null) {
-            film.setLikes(new HashSet<>());
+        if (film != null && film.getRate() == null) {
+            film.setRate(0);
         }
         return Optional.ofNullable(film);
     }
