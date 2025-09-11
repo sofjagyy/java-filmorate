@@ -22,15 +22,12 @@ public class MpaDbStorage implements MpaStorage {
     @Override
     public Collection<Mpa> findAll() {
         String sql = "SELECT mpa_id, name, description FROM mpa_ratings ORDER BY mpa_id";
-        log.debug("Выполняется запрос: {}", sql);
         return jdbcTemplate.query(sql, mpaRowMapper());
     }
 
     @Override
     public Optional<Mpa> findById(Long id) {
         String sql = "SELECT mpa_id, name, description FROM mpa_ratings WHERE mpa_id = ?";
-        log.debug("Выполняется запрос: {} с параметром id={}", sql, id);
-
         List<Mpa> mpaList = jdbcTemplate.query(sql, mpaRowMapper(), id);
 
         return mpaList.isEmpty() ? Optional.empty() : Optional.of(mpaList.get(0));

@@ -29,9 +29,7 @@ public class GenreDbStorage implements GenreStorage {
     public Optional<Genre> findById(Long id) {
         String sql = "SELECT genre_id, name FROM genres WHERE genre_id = ?";
         log.debug("Выполняется запрос: {} с параметром id={}", sql, id);
-
         List<Genre> genres = jdbcTemplate.query(sql, genreRowMapper(), id);
-
         return genres.isEmpty() ? Optional.empty() : Optional.of(genres.get(0));
     }
 

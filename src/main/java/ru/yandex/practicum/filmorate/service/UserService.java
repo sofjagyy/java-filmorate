@@ -21,6 +21,7 @@ public class UserService {
     public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
+
     public User getUserById(Long id) {
         return userStorage.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID " + id + " не найден"));
@@ -55,7 +56,6 @@ public class UserService {
         getUserById(userId);
         getUserById(friendId);
 
-        // Кастим к конкретной реализации для доступа к методу addFriend
         UserDbStorage userDbStorage = (UserDbStorage) userStorage;
         userDbStorage.addFriend(userId, friendId);
     }
@@ -64,7 +64,6 @@ public class UserService {
         getUserById(userId);
         getUserById(friendId);
 
-        // Кастим к конкретной реализации для доступа к методу removeFriend
         UserDbStorage userDbStorage = (UserDbStorage) userStorage;
         userDbStorage.removeFriend(userId, friendId);
     }
@@ -72,7 +71,6 @@ public class UserService {
     public List<User> getUserFriends(Long userId) {
         getUserById(userId);
 
-        // Кастим к конкретной реализации для доступа к методу getUserFriends
         UserDbStorage userDbStorage = (UserDbStorage) userStorage;
         return userDbStorage.getUserFriends(userId);
     }

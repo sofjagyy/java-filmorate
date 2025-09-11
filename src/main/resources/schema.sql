@@ -50,12 +50,12 @@ CREATE TABLE IF NOT EXISTS film_likes (
 );
 
 CREATE TABLE IF NOT EXISTS friendships (
-    user_id BIGINT REFERENCES users(user_id) ON DELETE CASCADE,
-    friend_id BIGINT REFERENCES users(user_id) ON DELETE CASCADE,
-    status VARCHAR(20) NOT NULL DEFAULT 'UNCONFIRMED' CHECK (status IN ('UNCONFIRMED', 'CONFIRMED')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id BIGINT NOT NULL,
+    friend_id BIGINT NOT NULL,
+    status VARCHAR(20) DEFAULT 'UNCONFIRMED',
     PRIMARY KEY (user_id, friend_id),
-    CHECK (user_id != friend_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (friend_id) REFERENCES users(user_id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_films_release_date ON films(release_date);

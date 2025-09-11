@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class FilmService {
 
-    @Qualifier("filmDbStorage")  // Используем DAO реализацию
+    @Qualifier("filmDbStorage")
     private final FilmStorage filmStorage;
 
-    @Qualifier("userDbStorage")  // Используем DAO реализацию
+    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
 
     public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage,
@@ -49,12 +49,11 @@ public class FilmService {
     }
 
     private void validateFilm(Film film) {
-        // Проверяем MPA рейтинг
+
         if (film.getMpa() != null) {
             mpaService.getMpaRatingById(film.getMpa().getId());
         }
 
-        // Проверяем жанры
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             Set<Long> genreIds = film.getGenres().stream()
                     .map(Genre::getId)
@@ -114,7 +113,6 @@ public class FilmService {
         getFilmById(filmId);
         checkUserExists(userId);
 
-        // Кастим к конкретной реализации для доступа к методу addLike
         FilmDbStorage filmDbStorage = (FilmDbStorage) filmStorage;
         filmDbStorage.addLike(filmId, userId);
     }
@@ -123,7 +121,6 @@ public class FilmService {
         getFilmById(filmId);
         checkUserExists(userId);
 
-        // Кастим к конкретной реализации для доступа к методу removeLike
         FilmDbStorage filmDbStorage = (FilmDbStorage) filmStorage;
         filmDbStorage.removeLike(filmId, userId);
     }
@@ -133,7 +130,6 @@ public class FilmService {
             count = 10;
         }
 
-        // Кастим к конкретной реализации для доступа к методу getPopularFilms
         FilmDbStorage filmDbStorage = (FilmDbStorage) filmStorage;
         return filmDbStorage.getPopularFilms(count);
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.yandex.practicum.filmorate.validation.ValidFilmReleaseDate;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -23,6 +24,7 @@ public class Film {
 
     @NotNull(message = "Дата релиза не может быть null")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @ValidFilmReleaseDate
     private LocalDate releaseDate;
 
     @Positive(message = "Продолжительность фильма должна быть положительной")
@@ -35,7 +37,9 @@ public class Film {
 
     private Integer rate = 0;
 
-    public Film() {}
+    public Film() {
+
+    }
 
     public Film(String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa) {
         this.name = name;

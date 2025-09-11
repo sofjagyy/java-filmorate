@@ -16,7 +16,7 @@ import java.sql.PreparedStatement;
 import java.util.*;
 
 @Repository("userDbStorage")
-@Primary// Имя для @Qualifier
+@Primary
 @RequiredArgsConstructor
 @Slf4j
 public class UserDbStorage implements UserStorage {
@@ -41,7 +41,6 @@ public class UserDbStorage implements UserStorage {
         Long userId = keyHolder.getKey().longValue();
         user.setId(userId);
 
-        // Устанавливаем имя как логин, если имя не задано
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
@@ -68,7 +67,6 @@ public class UserDbStorage implements UserStorage {
         String sql = "SELECT user_id, login, name, email, birthday FROM users ORDER BY user_id";
         List<User> users = jdbcTemplate.query(sql, userRowMapper());
 
-        // Загружаем друзей для всех пользователей
         Map<Long, Set<Long>> usersFriends = loadFriendsForUsers(
                 users.stream().map(User::getId).toList()
         );
@@ -90,15 +88,14 @@ public class UserDbStorage implements UserStorage {
             return Optional.empty();
         }
 
-        User user = users.get(0);
+        User user = users.getFirst();
         user.setFriends(new HashSet<>(getUserFriendsIds(id)));
 
         return Optional.of(user);
     }
 
     public void addFriend(Long userId, Long friendId) {
-        String sql = "INSERT INTO friendships (user_id, friend_id, status) VALUES (?, ?, 'UNCONFIRMED') " +
-                "ON CONFLICT (user_id, friend_id) DO NOTHING";
+        String sql = "MERGE INTO friendships (user_id, friend_id, status) VALUES (?, ?, 'UNCONFIRMED')";
         jdbcTemplate.update(sql, userId, friendId);
         log.info("Пользователь {} добавил в друзья пользователя {}", userId, friendId);
     }

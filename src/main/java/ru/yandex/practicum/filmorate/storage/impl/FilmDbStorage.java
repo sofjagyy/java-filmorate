@@ -46,7 +46,6 @@ public class FilmDbStorage implements FilmStorage {
         Long filmId = keyHolder.getKey().longValue();
         film.setId(filmId);
 
-        // Сохраняем жанры
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             updateFilmGenres(filmId, film.getGenres());
         }
@@ -67,7 +66,6 @@ public class FilmDbStorage implements FilmStorage {
                 film.getMpa().getId(),
                 film.getId());
 
-        // Обновляем жанры
         if (film.getGenres() != null) {
             updateFilmGenres(film.getId(), film.getGenres());
         }
@@ -106,10 +104,8 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public void addLike(Long filmId, Long userId) {
-        String sql = "INSERT INTO film_likes (film_id, user_id) VALUES (?, ?) " +
-                "ON CONFLICT (film_id, user_id) DO NOTHING";
+        String sql = "MERGE INTO film_likes (film_id, user_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, filmId, userId);
-        log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
     }
 
     public void removeLike(Long filmId, Long userId) {
@@ -137,7 +133,6 @@ public class FilmDbStorage implements FilmStorage {
         return films;
     }
 
-    // Приватные методы для работы с жанрами и лайками
     private void updateFilmGenres(Long filmId, Collection<Genre> genres) {
         // Удаляем старые жанры
         jdbcTemplate.update("DELETE FROM film_genres WHERE film_id = ?", filmId);
@@ -205,7 +200,6 @@ public class FilmDbStorage implements FilmStorage {
         return result;
     }
 
-    // RowMapper для Film
     private RowMapper<Film> filmRowMapper() {
         return (rs, rowNum) -> {
             Film film = new Film();
