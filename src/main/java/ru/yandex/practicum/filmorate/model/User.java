@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class User {
     @EqualsAndHashCode.Include
     private Long id;
@@ -30,8 +32,6 @@ public class User {
     private LocalDate birthday;
 
     private Set<Long> friends = new HashSet<>();
-
-    public User() {}
 
     public User(String login, String name, String email, LocalDate birthday) {
         this.login = login;

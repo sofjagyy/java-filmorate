@@ -5,13 +5,17 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.validation.ValidFilmReleaseDate;
+import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class Film {
     @EqualsAndHashCode.Include
     private Long id;
@@ -36,8 +40,6 @@ public class Film {
     private Mpa mpa;
     private Integer rate = 0;
 
-    public Film() {}
-
     public Film(String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa) {
         this.name = name;
         this.description = description;
@@ -45,4 +47,6 @@ public class Film {
         this.duration = duration;
         this.mpa = mpa;
     }
+
+    private Set<Long> likes = new HashSet<>();
 }
