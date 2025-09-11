@@ -36,9 +36,7 @@ public class Film {
     private Mpa mpa;
     private Integer rate = 0;
 
-    public Film() {
-
-    }
+    public Film() {}
 
     public Film(String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa) {
         this.name = name;
