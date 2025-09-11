@@ -1,64 +1,64 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
-    private final Map<Integer, User> users = new HashMap<>();
+    private final UserService userService;
 
     @GetMapping
-    public Collection<User> findAll() {
-        Collection<User> result = users.values();
-        return result;
+    public ResponseEntity<Collection<User>> findAll() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user) {
-        user.setId(getNextId());
-
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        users.put(user.getId(), user);
-        return user;
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(user));
     }
 
     @PutMapping
-    public User update(@Valid @RequestBody User updatedUser) {
-        if (!users.containsKey(updatedUser.getId())) {
-            log.warn("Попытка обновления несуществующего пользователя с ID: {}", updatedUser.getId());
-            throw new NotFoundException("Нет пользователя с таким id");
-        }
-
-        User oldUser = users.get(updatedUser.getId());
-        oldUser.setName(updatedUser.getName());
-        oldUser.setEmail(updatedUser.getEmail());
-        oldUser.setLogin(updatedUser.getLogin());
-
-        if (updatedUser.getBirthday() != null) {
-            oldUser.setBirthday(updatedUser.getBirthday());
-        }
-
-        log.info("Пользователь с ID: {} успешно обновлен", oldUser.getId());
-        return oldUser;
+    public ResponseEntity<User> update(@Valid @RequestBody User updatedUser) {
+        return ResponseEntity.ok(userService.updateUser(updatedUser));
     }
 
-    private int getNextId() {
-        int currentMaxId = users.keySet()
-                .stream()
-                .mapToInt(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+    @PutMapping("/{id}/friends/{friendId}")
+    public ResponseEntity<Void> addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        userService.addFriend(id, friendId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public ResponseEntity<Void> removeFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        userService.removeFriend(id, friendId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/friends")
+    public ResponseEntity<List<User>> getUserFriends(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserFriends(id));
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public ResponseEntity<List<User>> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        return ResponseEntity.ok(userService.getCommonFriends(id, otherId));
     }
 }
+
