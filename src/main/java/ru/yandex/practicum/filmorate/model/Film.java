@@ -34,7 +34,6 @@ public class Film {
 
     @NotNull(message = "MPA рейтинг обязателен")
     private Mpa mpa;
-
     private Integer rate = 0;
 
     public Film() {
