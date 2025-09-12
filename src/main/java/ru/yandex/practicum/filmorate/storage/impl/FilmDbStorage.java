@@ -209,7 +209,6 @@ public class FilmDbStorage implements FilmStorage {
             film.setReleaseDate(rs.getDate("release_date").toLocalDate());
             film.setDuration(rs.getInt("duration"));
 
-            // Загружаем MPA
             if (rs.getLong("mpa_id") != 0) {
                 Mpa mpa = new Mpa();
                 mpa.setId(rs.getLong("mpa_id"));
