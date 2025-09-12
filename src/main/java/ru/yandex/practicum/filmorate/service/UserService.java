@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class UserService {
 
-    @Qualifier("userDbStorage")  // Используем DAO реализацию
+    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
 
     public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
