@@ -61,4 +61,3 @@ public class UserController {
         return ResponseEntity.ok(userService.getCommonFriends(id, otherId));
     }
 }
-

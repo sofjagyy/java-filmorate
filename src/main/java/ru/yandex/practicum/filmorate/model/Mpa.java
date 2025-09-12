@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MpaRating {
+public class Mpa {
     private Long id;
     private String name;
     private String description;
