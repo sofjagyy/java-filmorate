@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
-import ru.yandex.practicum.filmorate.storage.impl.FilmDbStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,11 +17,11 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class FilmService {
-    @Qualifier("filmDbStorage")
-    private final FilmStorage filmStorage;
 
-    @Qualifier("userDbStorage")
+    private final FilmStorage filmStorage;
     private final UserStorage userStorage;
+    private final GenreService genreService;
+    private final MpaService mpaService;
 
     public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage,
                        @Qualifier("userDbStorage") UserStorage userStorage,
@@ -33,9 +32,6 @@ public class FilmService {
         this.genreService = genreService;
         this.mpaService = mpaService;
     }
-
-    private final GenreService genreService;
-    private final MpaService mpaService;
 
     public Film getFilmById(Long id) {
         return filmStorage.findById(id)
@@ -48,7 +44,6 @@ public class FilmService {
     }
 
     private void validateFilm(Film film) {
-
         if (film.getMpa() != null) {
             mpaService.getMpaRatingById(film.getMpa().getId());
         }
@@ -112,16 +107,14 @@ public class FilmService {
         getFilmById(filmId);
         checkUserExists(userId);
 
-        FilmDbStorage filmDbStorage = (FilmDbStorage) filmStorage;
-        filmDbStorage.addLike(filmId, userId);
+        filmStorage.addLike(filmId, userId);
     }
 
     public void removeLike(Long filmId, Long userId) {
         getFilmById(filmId);
         checkUserExists(userId);
 
-        FilmDbStorage filmDbStorage = (FilmDbStorage) filmStorage;
-        filmDbStorage.removeLike(filmId, userId);
+        filmStorage.removeLike(filmId, userId);
     }
 
     public List<Film> getPopularFilms(Integer count) {
@@ -129,7 +122,6 @@ public class FilmService {
             count = 10;
         }
 
-        FilmDbStorage filmDbStorage = (FilmDbStorage) filmStorage;
-        return filmDbStorage.getPopularFilms(count);
+        return filmStorage.getPopularFilms(count);
     }
 }

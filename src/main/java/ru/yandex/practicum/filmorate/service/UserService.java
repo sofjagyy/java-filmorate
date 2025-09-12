@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
-import ru.yandex.practicum.filmorate.storage.impl.UserDbStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 @Slf4j
 public class UserService {
 
-    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
 
     public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
@@ -56,30 +54,26 @@ public class UserService {
         getUserById(userId);
         getUserById(friendId);
 
-        UserDbStorage userDbStorage = (UserDbStorage) userStorage;
-        userDbStorage.addFriend(userId, friendId);
+        userStorage.addFriend(userId, friendId);
     }
 
     public void removeFriend(Long userId, Long friendId) {
         getUserById(userId);
         getUserById(friendId);
 
-        UserDbStorage userDbStorage = (UserDbStorage) userStorage;
-        userDbStorage.removeFriend(userId, friendId);
+        userStorage.removeFriend(userId, friendId);
     }
 
     public List<User> getUserFriends(Long userId) {
         getUserById(userId);
 
-        UserDbStorage userDbStorage = (UserDbStorage) userStorage;
-        return userDbStorage.getUserFriends(userId);
+        return userStorage.getUserFriends(userId);
     }
 
     public List<User> getCommonFriends(Long userId, Long otherUserId) {
         getUserById(userId);
         getUserById(otherUserId);
 
-        UserDbStorage userDbStorage = (UserDbStorage) userStorage;
-        return userDbStorage.getCommonFriends(userId, otherUserId);
+        return userStorage.getCommonFriends(userId, otherUserId);
     }
 }
